@@ -21,7 +21,7 @@ namespace BankingApp.Models.Domain
             {
                 return _balance;
             }
-             set
+             private set
             {
                 if (value < 0)
                 {
@@ -57,10 +57,30 @@ namespace BankingApp.Models.Domain
             _transactions.Add(new Transaction(amount, TransactionType.Deposit));
         }
 
-        public void Withdraw(decimal amount)
+        public virtual void Withdraw(decimal amount)
         {
-            Balance -= amount + WithdrawCost;
+            Balance -= amount;
             _transactions.Add(new Transaction(amount, TransactionType.Withdraw));
+        }
+
+        public override string ToString()
+        {
+            return $"{AccountNumber} -- {Balance}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            BankAccount ba = obj as BankAccount;
+            if(ba == null)
+            {
+                return false;
+            }
+            return AccountNumber == ba.AccountNumber;
+        }
+
+        public override int GetHashCode()
+        {
+            return AccountNumber.GetHashCode();
         }
         #endregion
 
